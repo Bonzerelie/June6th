@@ -1280,17 +1280,20 @@ document.getElementById('chord-detail-feedback').textContent =
       btn.disabled = true;
     });
   
-    const isCorrect = selectedText === correctText;
+    // ✅ Score logic:
+    if (selectedText === correctText) {
+      chordVisualScore.correct++;
+    } else {
+      chordVisualScore.incorrect++;
+    }
   
-    chordVisualFeedback.textContent = isCorrect
-      ? `✅ Correct! It was ${correctText}.`
-      : `❌ Incorrect. It was ${correctText}.`;
+    // ✅ Update score display
+    updateChordVisualScoreDisplay();
   
-    updateScore('chordVisual', isCorrect);
+    // ✅ Enable "Next" button
     nextChordVisualBtn.disabled = false;
-    nextChordVisualBtn.classList.add('pop-animation');
-    setTimeout(() => nextChordVisualBtn.classList.remove('pop-animation'), 300);
-      }
+  }
+  
   
   function chordVisualToAudioFilename(visualName) {
     if (!visualName || typeof visualName !== 'string') {
@@ -1329,6 +1332,24 @@ document.getElementById('chord-detail-feedback').textContent =
     chordVisualTotal.textContent = total;
     chordVisualAccuracy.textContent = total ? ((chordVisualScore.correct / total) * 100).toFixed(1) + '%' : '0.0%';
   }
+  
+  function updateChordVisualScoreDisplay() {
+    const correct = chordVisualScore.correct;
+    const incorrect = chordVisualScore.incorrect;
+    const total = correct + incorrect;
+    const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) + '%' : '0.0%';
+  
+    document.getElementById('chord-visual-correct').textContent = correct;
+    document.getElementById('chord-visual-incorrect').textContent = incorrect;
+    document.getElementById('chord-visual-total').textContent = total;
+    document.getElementById('chord-visual-accuracy').textContent = accuracy;
+  }
+
+  document.getElementById('reset-chord-visual-score').addEventListener('click', () => {
+    chordVisualScore.correct = 0;
+    chordVisualScore.incorrect = 0;
+    updateChordVisualScoreDisplay();
+  });
   
 
   function formatChordNameWithKey(fileName, key) {
@@ -1685,6 +1706,26 @@ if (allChordsBtn) allChordsBtn.remove();
     document.getElementById('main-menu').classList.remove('hidden');
     window.scrollTo(0, 0);
   });
+
+  document.getElementById('chord-visual-answers').addEventListener('click', function (e) {
+    if (!e.target.classList.contains('chord-visual-answer')) return;
+  
+    const selectedAnswer = e.target.dataset.answer;
+    const isCorrect = selectedAnswer === currentChordAnswer; // this variable must be set before
+  
+    if (isCorrect) {
+      e.target.classList.add('correct');
+      chordVisualScore.correct++;
+    } else {
+      e.target.classList.add('incorrect');
+      chordVisualScore.incorrect++;
+    }
+  
+    chordVisualScore.total++;
+    updateChordVisualScoreDisplay();
+    document.getElementById('next-chord-visual').disabled = false;
+  });
+  
 
   compareBtn.addEventListener('click', () => {
     hideAllScreens();

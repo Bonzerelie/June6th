@@ -423,20 +423,25 @@ body {
   flex-wrap: wrap;
   gap: 6px;
   justify-content: center;
-  margin: 10px 10px;
+  margin: 10px 0;
 }
 
 .vertical-answer-buttons {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
   justify-content: center;
-  gap: 8px;
+  gap: 8px 12px; /* row gap, column gap */
   margin: 10px 0;
 }
 
 .vertical-answer-buttons .wide-answer-button {
-  flex: 0 1 calc(50% - 8px); /* two columns with gap */
+  width: 140px;
+  min-width: 120px;
+  max-width: fit-content;
+  padding: 6px 0px;
+  white-space: nowrap;
   box-sizing: border-box;
+  text-align: center;
 }
 
 @media (max-width: 400px) {
@@ -518,6 +523,8 @@ body {
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
+  margin-top: 8px;
+  margin-bottom: 10px;
 }
 
 .chord-next-button:disabled {
@@ -530,12 +537,19 @@ body {
 }
 
 #chord-visual-image {
-  height: 200px;
+  height: 144px;
   max-width: 100%;
   width: auto;
   object-fit: contain;
   display: block;
-  margin: 5px auto;
+  margin-top: 0%;
+  margin-bottom: 0%;
+}
+
+#chord-visual-prompt {
+  margin-top: 16px;
+  margin-bottom: 4px;
+  font-size: 16px;
 }
 
 .chord-image-wrapper {
@@ -543,4 +557,8 @@ body {
   justify-content: center;  /* Center horizontally */
   align-items: center;      /* Optional: center vertically if wrapper has a height */
   width: 100%;
+}
+
+.chord-next-button:enabled {
+  animation: pop 0.3s ease-in-out;
 }
